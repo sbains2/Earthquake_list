@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <title>Earthquake List</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            display: flex;
+            height: 100vh;
+            flex-direction: row;
+            align-items: stretch;
+        }
+
+        #side-panel {
+            flex-basis: 500px;
+            overflow-y: scroll;
+        }
+
+        #map {
+            flex-grow: 1;
+            height: 100%;
+            width: 100%; /* Add this line to ensure the map takes the full width */
+        }
+
+        button {
+            margin-bottom: 10px;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 16px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Add a new class for highlighting selected row */
+        .highlighted-row {
+            background-color: yellow;
+        }
+    </style>
+</head>
+<body>
+<main id="container">
+    <div id="side-panel">
+        <h2>Earthquake List</h2>
+        <button id="sort-button">Sort by Magnitude</button>
+        <table>
+            <tr>
+                <th>id</th>
+                <th>magnitude</th>
+                <th>timestamp</th>
+            </tr>
+        </table>
+        <!-- Add a small textbox -->
+        <div id="textbox">Hover over the table rows to view each earthquake</div>
+    </div>
+    <div id="map"></div>
+</main>
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic2JhaW5zMiIsImEiOiJjbG90OHd4azcwNm1xMmttbTRoaG1xenU4In0.Vy8Yq-znVwkmJC3TeEAu7g';
+
+    let map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        zoom: 5.5,
+        center: [138, 38]
+    });
+
+    async function geojsonFetch() {
+        let response, earthquakes, japan;
+        response = await fetch('assets/earthquakes.geojson');
+        earthquakes = await response.json();
+        response = await fetch('assets/japan.json');
+        japan = await response.json();
+        return { earthquakes, japan };
+    }
+
+    geojsonFetch().then(({ earthquakes, japan }) => {
+        map.on('load', function () {
+            map.addSource('earthquakes', {
+                type: 'geojson',
+                data: earthquakes
+            });
+
+            map.addLayer({
+                'id': 'earthquakes-layer',
+                'type': 'circle',
+                'source': 'earthquakes',
+                'paint': {
+                    'fill-color': '#0080ff',
+                    'fill-opacity': 0.5
+                }
+            });
+
+            map.addSource('japan', {
+                type: 'geojson',
+                data: japan
+            });
+
+            map.addLayer({
+                'id': 'japan-layer',
+                'type': 'circle',
+                'source': 'japan',
+                'paint': {
+                    'circle-radius': 8,
+                    'circle-stroke-width': 2,
+                    'circle-color': 'red',
+                    'circle-stroke-color': 'white'
+                }
+            
+            });
+
+            let table = document.querySelector("table");
+            for (let i = 0; i < earthquakes.features.length; i++) {
+                let row = table.insertRow(-1);
+                let cell1 = row.insertCell(0);
+                let cell2 = row.insertCell(1);
+                let cell3 = row.insertCell(2);
+                cell1.innerHTML = earthquakes.features[i].properties.id;
+                cell2.innerHTML = earthquakes.features[i].properties.mag;
+                cell3.innerHTML = new Date(earthquakes.features[i].properties.time).toLocaleDateString("en-US");
+
+                // Add an event listener to each row for highlighting and centering on map feature
+                row.addEventListener('mouseenter', function () {
+                    // Remove highlighting from other rows
+                    const highlightedRows = document.querySelectorAll('.highlighted-row');
+                    highlightedRows.forEach((highlightedRow) => {
+                        highlightedRow.classList.remove('highlighted-row');
+                    });
+
+                    // Highlight the current row
+                    this.classList.add('highlighted-row');
+
+                    // Center on the corresponding map feature
+                    const coordinates = earthquakes.features[i].geometry.coordinates;
+                    map.flyTo({ center: coordinates, zoom: 8 });
+                });
+
+                // Remove highlighting when the mouse leaves the row
+                row.addEventListener('mouseleave', function () {
+                    this.classList.remove('highlighted-row');
+                });
+            }
+
+            let sortButton = document.getElementById("sort-button");
+            sortButton.addEventListener('click', sortTable);
+
+            function sortTable(e) {
+                let table, rows, switching, i, x, y, shouldSwitch;
+                table = document.querySelector("table");
+                switching = true;
+
+                while (switching) {
+                    switching = false;
+                    rows = table.rows;
+
+                    for (i = 1; i < (rows.length - 1); i++) {
+                        shouldSwitch = false;
+                        x = parseFloat(rows[i].getElementsByTagName("td")[1].innerHTML);
+                        y = parseFloat(rows[i + 1].getElementsByTagName("td")[1].innerHTML);
+
+                        if (x < y) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+
+                    if (shouldSwitch) {
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        switching = true;
+                    }
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>
+

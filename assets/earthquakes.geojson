@@ -1,0 +1,124 @@
+{
+  "type": "FeatureCollection",
+  "name": "earthquakes",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "Near Kanoya",
+        "mag": 5.3,
+        "place": "Near Kanoya, Japan",
+        "time": 1699649430023
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [130.8105, 31.263, 108.775]
+      },
+      "id": "us7000la7u"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "Near Honshu",
+        "mag": 4.5,
+        "place": "near the south coast of Honshu, Japan",
+        "time": 1699578010888
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [139.4562, 35.5275, 111.296]
+      },
+      "id": "us7000l9yv"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "Near Bonin Islands",
+        "mag": 4.7,
+        "place": "Bonin Islands, Japan region",
+        "time": 1699400296074
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [142.389, 28.9962, 10]
+      },
+      "id": "us7000l9g8"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "Near Shimoda",
+        "mag": 4.4,
+        "place": "116 km SSE of Shimoda, Japan",
+        "time": 1699361554824
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [139.6061, 33.7849, 124.532]
+      },
+      "id": "us7000l9cd"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "Near Onagawa Chō",
+        "mag": 4.7,
+        "place": "77 km SSE of Onagawa Chō, Japan",
+        "time": 1699204208366
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [141.8594, 37.8236, 54.529]
+      },
+      "id": "us7000l91k"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "Near Shimukappu",
+        "mag": 4.4,
+        "place": "30 km SSE of Shimukappu, Japan",
+        "time": 1699195517289
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [142.5765, 42.7487, 120.532]
+      },
+      "id": "us7000l913"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "Near Miyako",
+        "mag": 4.6,
+        "place": "109 km ENE of Miyako, Japan",
+        "time": 1699161402756
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [143.1796, 39.884, 36.777]
+      },
+      "id": "us7000l8yj"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "Near Nemuro",
+        "mag": 4.5,
+        "place": "17 km SE of Nemuro, Japan",
+        "time": 1699103780005
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [145.7011, 43.1974, 60.831]
+      },
+      "id": "us7000l9vf"
+    }
+  ]
+}
