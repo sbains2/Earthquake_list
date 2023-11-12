@@ -54,6 +54,16 @@
         .highlighted-row {
             background-color: yellow;
         }
+
+        @media (max-width: 1024px) {
+        #side-panel {
+            display: none;
+        }
+
+        #container {
+            flex-direction: column; /* Stack map on top of the side panel */
+        }
+    }
     </style>
 </head>
 <body>
